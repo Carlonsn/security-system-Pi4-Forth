@@ -1,14 +1,14 @@
+( Includi prima le librerie )
+( utility.f )
+( gpio.f )
+( timer.f )
+( led.f )
+( event.f )
 ( ECHO INPUT E PULL_DOWN - TRIGGER OUTPUT)
 ( # add rising and falling edge detection on echo_pin )
 (
-\ #### Define program constants
 \ trigger_pin=4    # the GPIO pin that is set to high to send an ultrasonic wave out. (output)
 \ echo_pin=17      # the GPIO pin that indicates a returning ultrasonic wave when it is set to high (input)
-\ number_of_samples=5 # this is the number of times the sensor tests the distance and then picks the middle value to return
-\ sample_sleep = .01  # amount of time in seconds that the system sleeps before sending another sample request to the sensor.
-\ You can try this at .05 if your measurements aren't good, or try it at 005 if you want faster sampling.
-\ calibration1 = 30   # the distance the sensor was calibrated at
-\ calibration2 = 1750 # the median value reported back from the sensor at 30 cm
 \ time_out = .05 # measured in seconds in case the program gets stuck in a loop
 )
 
