@@ -60,5 +60,3 @@ F 1BIT_SET CONSTANT I2CEN ( 1 = BSC controller is enabled I2C Enable)
 ;
 
 : SEND SWAP >I2C >I2C ;
-
-: I2C_DELAY 2000 DELAY ;
