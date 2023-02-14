@@ -36,7 +36,7 @@ BUTTON5 BUTTON6 OR BUTTON7 OR CLEAR_EVENT
 
         0.5SEC YELLOW BLINK
 
-        DEPTH 3 > DEPTH 3 < OR IF
+        DEPTH 3 <> IF
             STACK_CLEAR
             FALSE
             ." ERRATA " CR

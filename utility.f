@@ -5,6 +5,7 @@ RPI4 200000 + CONSTANT GPIO_ADDR
 : ')' [ CHAR ) ] LITERAL ;
 : '"' [ CHAR " ] LITERAL ;
 : ( IMMEDIATE 1 BEGIN KEY DUP '(' = IF DROP 1+ ELSE ')' = IF 1- THEN THEN DUP 0= UNTIL DROP ;
+: WITHIN -ROT OVER <= IF > IF TRUE ELSE FALSE THEN ELSE 2DROP FALSE THEN ;
 ( utility.f - per inserire i commenti - jonesforth.f )
 
 : C, HERE @ C! 1 HERE +! ;
