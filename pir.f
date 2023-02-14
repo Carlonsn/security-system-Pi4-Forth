@@ -1,9 +1,9 @@
 ( Includi prima le librerie )
+( utility.f )
 ( gpio.f )
 ( timer.f )
 ( led.f )
 ( event.f )
-( utility.f )
 ( pir.f )
 GPIO12 OUTPUT
 GPIO12 CONSTANT BUZZER
