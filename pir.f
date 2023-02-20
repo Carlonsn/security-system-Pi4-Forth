@@ -32,7 +32,7 @@ BEGIN
         1 SEC DELAY
         YELLOW LED OFF ." Pir Low" CR
         DEPTH 0> IF
-            ." Durata totale: " . ." secondi" CR 5 SEC DELAY
+            ." Durata totale: " . ." secondi" CR 1 SEC DELAY
         THEN
 BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
 
@@ -42,6 +42,6 @@ BEGIN
          CLEAR_EVENT ." Movimento rilevato" CR
          BEGIN PIR IS_ON WHILE 0.5SEC RED BLINK_BUZ REPEAT
     ELSE 
-        RED LED OFF CLEAR_EVENT ." Nessun movimento" CR 5 SEC DELAY
+        RED LED OFF CLEAR_EVENT ." Nessun movimento" CR 1 SEC DELAY
     THEN
 BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
