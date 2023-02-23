@@ -46,7 +46,7 @@ ECHO_PIN GPFEN0 ENABLE
     DEPTH 4 = IF
         SWAP - 154 * 2 / 1 MSEC / -ROT
         SWAP - 154 * 2 / 1 MSEC /
-        2DUP < IF DROP . ELSE NIP . THEN
+        2DUP < IF DROP ELSE NIP THEN . CR
     ELSE
         STACK_CLEAR
     THEN
