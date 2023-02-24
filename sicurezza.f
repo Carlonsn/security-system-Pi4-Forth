@@ -21,8 +21,6 @@ BUTTON8 GPREN0 ENABLE
         RESET  
         ." DIGITA IL PIN E PREMI INVIO "
         BEGIN
-            1 SEC DELAY
-
             BUTTON7 IS_CLICKED IF
             ." 7 " BUTTON7 N_GPIO BUTTON7 CLEAR_EVENT THEN
 
