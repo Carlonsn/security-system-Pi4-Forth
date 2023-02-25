@@ -62,6 +62,7 @@
 : '^ 5E >LCD ;
 : '_ 5F >LCD ;
 : '` 60 >LCD ;
+: 'mm 6D >LCD 6D >LCD ;
 : '{ 7B >LCD ;
 : '| 7C >LCD ;
 : '} 7D >LCD ;
