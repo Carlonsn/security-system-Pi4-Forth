@@ -39,7 +39,7 @@ N.B. In questa libreria verranno gestiti solo i GPIO appartenenti al banco 0, ci
 In questa sezione si farà uso delle word definite nel seguente link
 https://github.com/organix/pijFORTHos/blob/master/doc/forth.md#built-in-forth-words 
 
-Il codice seguente è stack-oriented, cioè si utilizzeranno diverse word per la manipolazione dello stack in modo da definire word utili per la realizzazione di un livello di astrazione superiore.
+Il codice seguente è stack-oriented, cioè si utilizzeranno diverse word per la manipolazione dello stack in modo da definire word utili per la realizzazione di un livello di astrazione superiore efficiente dal punto di vista delle prestazioni evitando quindi le allocazioni in memoria.
 Nello specifico le word utilizzate sono:
 
 Stack Manipulation
@@ -197,4 +197,84 @@ BUTTON CLEAR_EVENT
 BUTTON IS_CLICKED
 BUTTON IS_PRESSED
 ```
+# Sensori 
+
+In questa sezione saranno descritte le word e le costanti per il funzionamento di due sensori:
+
+PIR ( per maggiori informazioni http://win.adrirobot.it/sensori/pir_sensor/pir_sensor_hc-sr501_arduino.htm )
+SONAR ( per maggiori informazioni http://rasathus.blogspot.com/2012/09/ultra-cheap-ultrasonics-with-hy-srf05.html )
+
+: INIT_PIR
+    GPIO12 OUTPUT GPIO27 INPUT
+    GPIO27 GPREN0 ENABLE
+    GPIO27 CLEAR_EVENT ;
+GPIO12 CONSTANT BUZZER
+GPIO27 CONSTANT PIR
+
+: IS_HIGH IS_ON ;
+: BLINK_BUZ 2DUP LED ON BUZZER HIGH DELAY LED OFF BUZZER LOW DELAY ;
+: MOTION_DETECTED GPEDS0 @ AND 0 = IF 0 ELSE 1 THEN ;
+: DELAY_COUNTER 0 ;
+
+: PIR_CALIBRATION
+	BEGIN 
+		PIR IS_HIGH 0 = IF 1 SEC DELAY YELLOW LED OFF ." Nessun movimento" CR
+		ELSE YELLOW LED ON ." Pir High" CR DELAY_COUNTER
+			BEGIN PIR IS_HIGH WHILE 1 SEC DELAY 1+ DUP . ." sec " CR REPEAT CR
+		THEN 1 SEC DELAY YELLOW LED OFF ." Pir Low" CR
+        DEPTH 0> IF ." Durata totale: " . ." secondi" CR 1 SEC DELAY THEN
+	BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
+
+: MOTION_DETECTION
+    BEGIN 
+        PIR DUP MOTION_DETECTED IF
+            CLEAR_EVENT ." Movimento rilevato" CR
+            BEGIN PIR IS_HIGH WHILE 0.5SEC RED BLINK_BUZ REPEAT
+        ELSE 
+            RED LED OFF CLEAR_EVENT ." Nessun movimento" CR 1 SEC DELAY 
+        THEN
+    BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
+
+( sonar.f )
+: INIT_SONAR
+GPIO4 OUTPUT GPIO17 INPUT
+GPIO17 GPAREN0 ENABLE
+GPIO17 GPAFEN0 ENABLE ;
+
+GPIO4 CONSTANT TRIGGER_PIN
+GPIO17 CONSTANT ECHO_PIN
+
+: TIME_OUT 5 A * MSEC DELAY ;
+: SEND_TIME A MSEC DELAY ;
+: TRIGGER TRIGGER_PIN HIGH SEND_TIME TRIGGER_PIN LOW ;
+
+: TRIGGER_ECHO_CHECK
+    BEGIN
+    DEPTH 2 < WHILE
+        ECHO_PIN IS_HIGH IF TIME_OUT THEN TRIGGER
+        BEGIN ECHO_PIN IS_HIGH 0 = WHILE ." ." REPEAT NOW
+        BEGIN ECHO_PIN IS_HIGH WHILE ." -" REPEAT NOW
+    REPEAT
+    DEPTH 2 = IF SWAP - . CR
+            ELSE STACK_CLEAR THEN ;
+
+: SONAR_CHECK BEGIN 1 SEC DELAY TRIGGER_ECHO_CHECK BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
+
+: DISTANCE_DETECTION
+    BEGIN
+    DEPTH 4 < WHILE
+        ECHO_PIN IS_HIGH IF TIME_OUT THEN
+        TRIGGER
+        BEGIN ECHO_PIN IS_HIGH 0 = WHILE REPEAT
+        NOW
+        BEGIN ECHO_PIN IS_HIGH WHILE REPEAT
+        NOW
+    REPEAT
+    DEPTH 4 = IF
+        SWAP - 154 * 2 / 1 MSEC / -ROT
+        SWAP - 154 * 2 / 1 MSEC /
+        2DUP < IF DROP ELSE NIP THEN . CR
+    ELSE STACK_CLEAR THEN
+;
+: SONAR_DISTANCE BEGIN 1 SEC DELAY DISTANCE_DETECTION BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
 
