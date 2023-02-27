@@ -1,6 +1,9 @@
 # security-system-Pi4-Forth
 
 # Introduzione
+Lo scopo del progetto è di creare un sistema di sicurezza installabile in una residenza domestica per il controllo di eventuali intrusioni.
+Tramite l'utilizzo di due sensori, il sistema rileva il movimento dell'intruso e ne calcola la distanza. Un segnalatore acustico avviserà il proprietario non appena l'intruso sarà nelle prossimità del sensore e nel caso si avvicini troppo, farà scattare l'allarme.
+Inoltre il sistema è dotato di un pannello di controllo grazie al quale il proprietario può attivare il sistema di sicurezza tramite un pin segreto e disattivare l'allarme in caso di intrusioni rilevate.
 
 # Componenti Hardware 
 
@@ -303,6 +306,49 @@ GPIO17 CONSTANT ECHO_PIN
 : TRIGGER TRIGGER_PIN HIGH SEND_TIME TRIGGER_PIN LOW ;
 ```
 Tramite le word sopra definite si definiscono
+
 : TRIGGER_ECHO_CHECK ( stampa a video il passaggio da stato LOW a stato HIGH di ECHO_PIN e il tempo intercorso )
 
 : DISTANCE_DETECTION ( stampa a video la distanza rilevata )
+
+# Pin check
+```
+: INIT_PIN_BUTTONS
+GPIO5 GPREN0 ENABLE
+GPIO6 GPREN0 ENABLE
+GPIO7 GPREN0 ENABLE
+GPIO8 GPREN0 ENABLE ;
+GPIO5 CONSTANT BUTTON5
+GPIO6 CONSTANT BUTTON6
+GPIO7 CONSTANT BUTTON7
+GPIO8 CONSTANT BUTTON8
+
+: BUTTONS_RESET BUTTON5 BUTTON6 OR BUTTON7 OR BUTTON8 OR BREAK_BUTTON OR CLEAR_EVENT ;
+: SEQUENCE 8 = -ROT 6 = -ROT 5 = -ROT 2SWAP SWAP 7 = ; ( 7 5 6 8 )
+: RESET STACK_CLEAR
+        GPEDS0 @ 0<> IF
+        BUTTONS_RESET THEN
+        LCD CLEAR CURSOR !BLINKS ;
+
+: PIN_MSG DOWN CURSOR 'P 'I 'N ': CURSOR BLINKS ;
+: PIN_ERR LCD CLEAR 'W 'R 'O 'N 'G 'SPACE 'P 'I 'N  ;
+: PIN_OK LCD CLEAR 'C 'O 'R 'R 'E 'C 'T 'SPACE 'P 'I 'N ;
+: ATTEMPS_LEFT_MSG LCD CLEAR 'A 'T 'T 'E 'M 'P 'S 'SPACE 'L 'E 'F 'T ': 'SPACE ;
+
+VARIABLE ATTEMPS
+: INIT_ATTEMPS 3 ATTEMPS ! ;
+: TERMINATED @ 0 = ;
+: DECREMENT DUP @ 1- SWAP ! ;
+VARIABLE PIN_COUNTDOWN
+: INIT_COUNTDOWN A 3 * SEC NOW + PIN_COUNTDOWN ! ;
+: TIME_OVER PIN_COUNTDOWN @ NOW - 0 <= ;
+: PIN_CHECK
+
+```
+# Security system
+
+Tramite
+
+: DISTANCE_LED_DETECTION
+
+# Main
