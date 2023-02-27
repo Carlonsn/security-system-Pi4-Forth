@@ -1,9 +1,3 @@
-( Includi prima le librerie )
-( utility.f )
-( gpio.f )
-( timer.f )
-( led.f )
-( event.f )
 ( ECHO INPUT E PULL_DOWN - TRIGGER OUTPUT)
 ( # add rising and falling edge detection on echo_pin )
 (
@@ -11,12 +5,14 @@
 \ echo_pin=17      # the GPIO pin that indicates a returning ultrasonic wave when it is set to high (input)
 \ time_out = .05 # measured in seconds in case the program gets stuck in a loop
 )
-
+( sonar.f )
 : INIT_SONAR
-GPIO4 OUTPUT
-GPIO17 INPUT
-GPIO17 GPAREN0 ENABLE
-GPIO17 GPAFEN0 ENABLE ;
+    GPIO4 OUTPUT
+    GPIO17 INPUT
+    GPIO17 GPAREN0 ENABLE
+    GPIO17 GPAFEN0 ENABLE 
+    GPIO17 CLEAR_EVENT
+;
 
 GPIO4 CONSTANT TRIGGER_PIN
 GPIO17 CONSTANT ECHO_PIN
@@ -30,7 +26,7 @@ GPIO17 CONSTANT ECHO_PIN
     BEGIN
     DEPTH 2 < WHILE
         ECHO_PIN IS_HIGH IF 
-            TIME_OUT DELAY 
+            TIME_OUT
         THEN TRIGGER
         BEGIN 
             ECHO_PIN IS_HIGH 0 = WHILE 
@@ -49,7 +45,7 @@ GPIO17 CONSTANT ECHO_PIN
 : DISTANCE_DETECTION
     BEGIN
     DEPTH 4 < WHILE
-        ECHO_PIN IS_ON IF TIME_OUT DELAY THEN
+        ECHO_PIN IS_ON IF TIME_OUT THEN
         TRIGGER
         BEGIN ECHO_PIN IS_ON 0 = WHILE REPEAT
         NOW

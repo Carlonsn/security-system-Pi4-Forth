@@ -1,9 +1,3 @@
-( Includi prima le librerie )
-( utility.f )
-( gpio.f )
-( timer.f )
-( led.f )
-( event.f )
 ( pir.f )
 : INIT_PIR
     GPIO12 OUTPUT GPIO27 INPUT

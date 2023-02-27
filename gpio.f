@@ -9,15 +9,19 @@ GPIO_ADDR 10 + CONSTANT GPFSEL4
 : GPIO 1BIT_SET ;
 ( calcola n GPIO a partire dal bit significativo )
 : N_GPIO 0 SWAP BEGIN DUP 2 MOD 0 = IF 1 RSHIFT SWAP 1+ SWAP ELSE THEN DUP 2 = UNTIL DROP 1+ ;
-: N_LSHIFT A MOD 3 * ; ( n -- 3*q [q = resto della divisione per 10 0xA] )
+: 2_LSHIFT A MOD 2 * ;
+: 3_LSHIFT A MOD 3 * ; ( n -- 3*q [q = resto della divisione per 10 0xA] )
+: MASK2 2_LSHIFT 3 SWAP LSHIFT INVERT ;
+: MASK3 3_LSHIFT 7 SWAP LSHIFT INVERT ; 
+
 ( maschera da 3 bit ottenuta effettuando uno shift a sinistra di n di 7 )
 ( 7 in binario 0bx111 con invert tutti 1 tranne 0 nei 3 bit corrispondenti al 7)
-: MASK N_LSHIFT 7 SWAP LSHIFT INVERT ; ( es. 13 MASK -- 0b11.111.111_111.111.11_1.111.000.1_11.111.111 -- FFFFF8FF )
+ ( es. 13 MASK3 -- 0b11.111.111_111.111.11_1.111.000.1_11.111.111 -- FFFFF8FF )
 : OUT N_LSHIFT 1BIT_SET ;         ( GPFSEL in output - 001 )
 : ALT0_FUN N_LSHIFT 2+ 1BIT_SET ; ( GPFSEL in alt0   - 100 )
 : ALT5_FUN N_LSHIFT 1+ 1BIT_SET ; ( GPFSEL in alt5   - 010 )
-: FSEL DUP A / 4 * GPFSEL0 + ; ( ottengo il registro GPFSEL corrispondente al n GPIO calcolando l'offset = n/10 * 4)
-: FUNCTION FSEL 2DUP SWAP MASK SWAP @ AND ROT ;
+: FSEL A / 4 * GPFSEL0 + ; ( ottengo il registro GPFSEL corrispondente al n GPIO calcolando l'offset = n/10 * 4)
+: FUNCTION DUP FSEL 2DUP SWAP MASK SWAP @ AND ROT ;
 : INPUT N_GPIO FUNCTION DROP SWAP ! ;
 : OUTPUT N_GPIO FUNCTION OUT OR SWAP ! ;
 : ALT0 N_GPIO FUNCTION ALT0_FUN OR SWAP ! ;
