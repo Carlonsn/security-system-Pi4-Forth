@@ -38,6 +38,7 @@ N.B. In questa libreria verranno gestiti solo i GPIO appartenenti al banco 0, ci
 
 In questa sezione si farà uso delle word definite nel seguente link
 https://github.com/organix/pijFORTHos/blob/master/doc/forth.md#built-in-forth-words 
+
 Il codice seguente è stack-oriented, cioè si utilizzeranno diverse word per la manipolazione dello stack in modo da definire word utili per la realizzazione di un livello di astrazione superiore.
 Nello specifico le word utilizzate sono:
 
@@ -79,7 +80,7 @@ Arithmetic Operations MOD + - * / 1+ 2+
 
 : ALT5_FUN 3_LSHIFT 1+ 1BIT_SET ; ( GPFSEL in alt5   - 010 )
 
-N.B. L'utente ha la possibilità di entendere la libreria aggiungendo le restanti function definendo le mask corrispondenti
+N.B. L'utente ha la possibilità di entendere la libreria aggiungendo le restanti alternative function definendo le mask corrispondenti.
 
 <img width="285" alt="image" src="https://user-images.githubusercontent.com/74939222/221562811-1422c824-fbd3-4daa-94e4-d816bdda4b21.png">
 
