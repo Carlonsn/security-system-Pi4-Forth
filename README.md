@@ -100,9 +100,38 @@ Le seguenti word richiamano le word precedentemente definite e effettuano lo sto
 
 : ALT5 N_GPIO FUNCTION ALT5_FUN OR SWAP ! ;
 
+# Funzionalità implementate per la gestione dei LED
 
-GPSET
-I registri del set di output vengono utilizzati per impostare un pin GPIO. Il campo SETn definisce il rispettivo pin GPIO da impostare. Se il pin viene definito come output, il bit verrà impostato in base all'ultimo set/clear operazione.
+I registri che permettono di definire il funzionamento in output di un GPIO sono GPSETn e GPCLRn.
 
-GPCLR
-I registri di cancellazione dell'output vengono utilizzati per cancellare un pin GPIO. Il campo CLRn definisce il rispettivo pin GPIO da cancellare. Se il pin viene definito come output, il bit verrà impostato in base all'ultimo set/clear operazione.
+GPSETn
+I registri di set dell'output vengono utilizzati per impostare un pin GPIO. Il campo SETn definisce il rispettivo pin GPIO da impostare. Se il pin viene definito in output, il bit verrà impostato in base all'ultima operazione di set/clear.
+
+GPIO_ADDR 1C + CONSTANT GPSET0
+
+GPCLRn
+I registri di cancellazione dell'output vengono utilizzati per cancellare un pin GPIO. Il campo CLRn definisce il rispettivo pin GPIO da cancellare. Se il pin viene definito in output, il bit verrà impostato in base all'ultima operazione di set/clear.
+
+GPIO_ADDR 28 + CONSTANT GPCLR0
+
+Tramite i registri appena descritti, è possibile ad esempio gestire il funzionamento di un led definendo word e constanti nel seguente modo:
+```
+GPIO13 OUTPUT ( si setta il GPIO13 in output )
+
+: LED GPSET0 GPCLR0 ; 
+
+: ON DROP ! ;
+
+: OFF NIP ! ;
+
+GPIO13 LED ON
+GPIO13 LED OFF
+```
+per una migliore leggibilità si definisce la costante GPIO13 CONSTANT RED e quindi il comando finale 
+
+GPIO_ADDR 34 + CONSTANT GPLEV0
+
+: HIGH LED ON ;
+: LOW LED OFF ;
+: IS_ON GPLEV0 @ AND 0 = IF 0 ELSE 1 THEN ;
+: BLINK 2DUP LED ON DELAY LED OFF DELAY ;
