@@ -1,11 +1,42 @@
 # security-system-Pi4-Forth
 
-# Descrizione del progetto
+# Introduzione
+
+# Componenti Hardware 
+
+•	N.1 Raspberry Pi 4 Model B
+
+•	N.1 Breadboard
+
+•	N.1 LCD 16x02
+
+•	N.1 Modulo I2C con chip PCF8574AT
+
+•	N.1 Buzzer attivo
+
+•	N.3 LED (ROSSO, VERDE, GIALLO)
+
+•	N.1 Pulsante piccolo
+
+•	N.4 Pulsanti grandi (2x ROSSO, 2x BLUE)
+
+•	N.3 Resistenze da 220Ω
+
+•	N.1 USB-Serial CH340 (Uart Serial)
+
+•	N.1 HY-SRF05 Sensore di distanza ad ultrasuoni
+
+•	N.1 PIR HC-SR501 Sensore infrarosso passivo
+
+•	Jumper e ponticelli per i collegamenti
+
+
+# Circuito
 ![photo_2023-02-27_18-58-20](https://user-images.githubusercontent.com/74939222/221645527-e554197d-b09d-4666-b268-ed47c611ae11.jpg)
 ![photo_2023-02-27_18-55-48](https://user-images.githubusercontent.com/74939222/221645573-7e1368a9-8908-4797-b3ec-571af9a11c17.jpg)
 
 
-# Descrizione libreria in FORTH per la gestione di dispositivi input/output per Raspberry Pi 4 Model B
+# Descrizione libreria in FORTH per la gestione di dispositivi input/output 
 
 Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno di BCM2711.
 
@@ -177,7 +208,7 @@ Invece per resettare il registro degli eventi per uno specifico GPIO si definisc
 
 : CLEAR_EVENT GPEDS0 ENABLE ; ( GPIOn CLEAR_EVENT )
 
-# Applicazione della gestione degli eventi: i BUTTONs
+# Applicazione della gestione degli eventi: i Buttons
 
 Tra i più comuni dispotivi di input è presente il pulsante (BUTTON). Per il suo corretto funzionamento bisogna settare il GPIO in input ( impostazione di default ), abilitare il GPIO al rilevamento di fronti di salita /discesa, e abilitare il pull-up.
 
@@ -202,6 +233,26 @@ BUTTON CLEAR_EVENT
 BUTTON IS_CLICKED
 BUTTON IS_PRESSED
 ```
+# Timer 
+Le seguenti word sono state definite per poter utilizzare le funzionalità del timer di sistema. 
+
+RPI4 3000 + CONSTANT TIMER  ( Registro base del timer )
+
+TIMER       CONSTANT TIMER_CONTROL_STATUS ( Registro di controllo / stato del System Timer )
+
+TIMER  04 + CONSTANT TIMER_COUNTER_LOW ( Registro contenente i 32 bit inferiori del System Timer Counter )
+
+: NOW TIMER_COUNTER_LOW @ ; ( restituisce il valore in microsecondi dall’avvio del sistema )
+
+: DELAY NOW + BEGIN DUP NOW - THEN 0 <= UNTIL DROP ; ( delay di un tempo pari ad n microsecondi utilizzando un busy wait )
+
+: MSEC 3E8 * ; ( 1000 * conversione da millisecondi a microsecondi )
+
+: 0.5SEC 1F4 MSEC ; 
+
+: SEC 3E8 MSEC * ; ( 1000 * conversione da secondi a millisecondi )
+
+
 # Sensori 
 
 In questa sezione saranno descritte le word e le costanti per il funzionamento di due sensori:
