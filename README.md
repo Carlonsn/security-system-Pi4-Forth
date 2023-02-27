@@ -45,8 +45,10 @@ Nello specifico le word utilizzate sono:
 
 Stack Manipulation
 DUP DROP 2DUP SWAP ROT
+
 Logical and Bitwise Operations
 AND OR INVERT LSHIFT RSHIFT
+
 Arithmetic Operations MOD + - * / 1+ 2+
 
 
