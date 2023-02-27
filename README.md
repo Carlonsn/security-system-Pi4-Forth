@@ -11,6 +11,7 @@ Gli indirizzi dei registri del RPI4 sono in esadecimale. Essi si trovano nella d
 Definiamo come costante il valore esadecimale corrispondente all'indirizzo per il RPI4
 
 FE000000 CONSTANT RPI4
+
 da questo momento possiamo definire qualsiasi altro registro aggiunge a quest'ultimo il valore del registro desiderato
 
 Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno BCM2711.
