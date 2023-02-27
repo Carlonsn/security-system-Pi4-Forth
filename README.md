@@ -2,29 +2,29 @@
 
 # Descrizione libreria implementata per la gestione dei gpio di RPI4
 
-Per iniziare settiamo la base dell'interprete in esadecimale con la word
+Per iniziare è necessario settare la base dell'interprete in esadecimale con la word
 
 HEX
 
 Gli indirizzi dei registri del RPI4 sono in esadecimale. Essi si trovano nella documentazione della BCM2711 ARM Peripheral
 
-Definiamo come costante il valore esadecimale corrispondente all'indirizzo per il RPI4
+Si definisce come costante il valore esadecimale corrispondente all'indirizzo per il RPI4
 
 FE000000 CONSTANT RPI4
 
-da questo momento possiamo definire qualsiasi altro registro aggiunge a quest'ultimo il valore del registro desiderato
+da questo momento è possibile definire qualsiasi altro registro aggiungendo a quest'ultimo il valore del registro desiderato.
 
 Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno BCM2711.
 
 General-Purpose Input/Output (GPIO) ha i seguenti registri. Si presuppone che tutti gli accessi siano a 32 bit.
 
-Definiamo come costante l'indirizzo di base del registro GPIO
+Si definisce come costante l'indirizzo di base del registro GPIO
 
 RPI4 200000 + CONSTANT GPIO_ADDR
 
-I primi registri che ci serviranno per la gestione dei GPIO sono i GPFSEL
+I primi registri che serviranno per la gestione dei GPIO sono i GPFSEL.
 
-I registri di selezione funzione vengono utilizzati per definire il funzionamento dei pin I/O generici.
+I registri di selezione funzione sono utilizzati per definire il funzionamento dei pin I/O generici.
 
 GPIO_ADDR      CONSTANT GPFSEL0
 
@@ -32,15 +32,15 @@ GPIO_ADDR  4 + CONSTANT GPFSEL1
 
 GPIO_ADDR  8 + CONSTANT GPFSEL2
 
-N.B. In questa libreria andremo a gestire solo i GPIO appartenenti al banco 0, cioè quelli accessibili dall'utente tramite i pin del RPI4 come mostrati nel sito https://pinout.xyz/ . Nonostante ciò l'utente ha la possibilità di estendere 
+N.B. In questa libreria verranno gestiti solo i GPIO appartenenti al banco 0, cioè quelli accessibili dall'utente tramite i pin del RPI4 come mostrati nel sito https://pinout.xyz/ . Nonostante ciò l'utente ha la possibilità di estendere 
 autonomamente questa libreria aggiungendo i registri per la gestione degli altri banchi.
 
 
 # Funzionalità implementate per la function selection
 
-In questa sezione utilizzeremo le word definite qui
+In questa sezione si farò uso delle word definite nel seguente link
 https://github.com/organix/pijFORTHos/blob/master/doc/forth.md#built-in-forth-words 
-Il codice seguente è stack-oriented, cioè si farà molto uso delle word per la manipolazione dello stack per l'implementazione di word utili nella realizzazione di un livello di astrazione superiore.
+Il codice seguente è stack-oriented, cioè si farà uso delle word per la manipolazione dello stack per definizione di word utili nella realizzazione di un livello di astrazione superiore.
 Nello specifico le word utilizzate sono:
 
 Stack Manipulation
@@ -50,7 +50,6 @@ Logical and Bitwise Operations
 AND OR INVERT LSHIFT RSHIFT
 
 Arithmetic Operations MOD + - * / 1+ 2+
-
 
 : 1BIT_SET 1 SWAP LSHIFT ;
 
