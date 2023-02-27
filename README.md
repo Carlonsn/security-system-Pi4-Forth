@@ -209,77 +209,49 @@ In questa sezione saranno descritte le word e le costanti per il funzionamento d
 PIR ( per maggiori informazioni http://win.adrirobot.it/sensori/pir_sensor/pir_sensor_hc-sr501_arduino.htm )
 SONAR ( per maggiori informazioni http://rasathus.blogspot.com/2012/09/ultra-cheap-ultrasonics-with-hy-srf05.html )
 
-: INIT_PIR
-    GPIO12 OUTPUT GPIO27 INPUT
-    GPIO27 GPREN0 ENABLE
-    GPIO27 CLEAR_EVENT ;
-GPIO12 CONSTANT BUZZER
+# PIR HC-SR501 Sensore infrarosso passivo
+
+Per il funzionamento del sensore PIR, bisogna settare il GPIO in input e abilitare il rilevamento dei fronti di salita 
+```
+GPIO27 INPUT
+GPIO27 GPREN0 ENABLE
+GPIO27 CLEAR_EVENT
+```
+Si definisco le seguenti word per l'utilizzo del sensore
+
+: IS_HIGH IS_ON ; ( restituisce 0 se il segnale è LOW - 1 se il segnale HIGH )
+
+: MOTION_DETECTED GPEDS0 @ AND 0 = IF 0 ELSE 1 THEN ; ( restituisce 0 nessun movimento rilevato - 1 movimento rilevato )
+
+```
 GPIO27 CONSTANT PIR
+PIR IS_HIGH
+PIR MOTION_DETECTED
+```
+Tramite le word sopra definite si definiscono 
+: PIR_CALIBRATION ( permette all'utente di regolare il tempo di stato HIGH del sensore stampando a video i secondi totali )
 
-: IS_HIGH IS_ON ;
-: BLINK_BUZ 2DUP LED ON BUZZER HIGH DELAY LED OFF BUZZER LOW DELAY ;
-: MOTION_DETECTED GPEDS0 @ AND 0 = IF 0 ELSE 1 THEN ;
-: DELAY_COUNTER 0 ;
+: MOTION_DETECTION ( appena il sensore individua un movimento, accende il led )
 
-: PIR_CALIBRATION
-	BEGIN 
-		PIR IS_HIGH 0 = IF 1 SEC DELAY YELLOW LED OFF ." Nessun movimento" CR
-		ELSE YELLOW LED ON ." Pir High" CR DELAY_COUNTER
-			BEGIN PIR IS_HIGH WHILE 1 SEC DELAY 1+ DUP . ." sec " CR REPEAT CR
-		THEN 1 SEC DELAY YELLOW LED OFF ." Pir Low" CR
-        DEPTH 0> IF ." Durata totale: " . ." secondi" CR 1 SEC DELAY THEN
-	BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
-
-: MOTION_DETECTION
-    BEGIN 
-        PIR DUP MOTION_DETECTED IF
-            CLEAR_EVENT ." Movimento rilevato" CR
-            BEGIN PIR IS_HIGH WHILE 0.5SEC RED BLINK_BUZ REPEAT
-        ELSE 
-            RED LED OFF CLEAR_EVENT ." Nessun movimento" CR 1 SEC DELAY 
-        THEN
-    BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
-
-( sonar.f )
-: INIT_SONAR
-GPIO4 OUTPUT GPIO17 INPUT
+# HY-SRF05 Sensore di distanza ad ultrasuoni
+Per il funzionamento del sensore Sonar, bisogna settare un GPIO in output, uno in input e abilitare il rilevamento dei fronti di salita e di discesa
+```
+GPIO4 OUTPUT
+GPIO17 INPUT
 GPIO17 GPAREN0 ENABLE
 GPIO17 GPAFEN0 ENABLE ;
+```
+Si definisco le seguenti word e costanti per l'utilizzo del sensore
 
+```
 GPIO4 CONSTANT TRIGGER_PIN
 GPIO17 CONSTANT ECHO_PIN
 
 : TIME_OUT 5 A * MSEC DELAY ;
 : SEND_TIME A MSEC DELAY ;
 : TRIGGER TRIGGER_PIN HIGH SEND_TIME TRIGGER_PIN LOW ;
+```
+Tramite le word sopra definite si definiscono
+: TRIGGER_ECHO_CHECK ( stampa a video il passaggio da stato LOW a stato HIGH di ECHO_PIN e il tempo intercorso )
 
-: TRIGGER_ECHO_CHECK
-    BEGIN
-    DEPTH 2 < WHILE
-        ECHO_PIN IS_HIGH IF TIME_OUT THEN TRIGGER
-        BEGIN ECHO_PIN IS_HIGH 0 = WHILE ." ." REPEAT NOW
-        BEGIN ECHO_PIN IS_HIGH WHILE ." -" REPEAT NOW
-    REPEAT
-    DEPTH 2 = IF SWAP - . CR
-            ELSE STACK_CLEAR THEN ;
-
-: SONAR_CHECK BEGIN 1 SEC DELAY TRIGGER_ECHO_CHECK BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
-
-: DISTANCE_DETECTION
-    BEGIN
-    DEPTH 4 < WHILE
-        ECHO_PIN IS_HIGH IF TIME_OUT THEN
-        TRIGGER
-        BEGIN ECHO_PIN IS_HIGH 0 = WHILE REPEAT
-        NOW
-        BEGIN ECHO_PIN IS_HIGH WHILE REPEAT
-        NOW
-    REPEAT
-    DEPTH 4 = IF
-        SWAP - 154 * 2 / 1 MSEC / -ROT
-        SWAP - 154 * 2 / 1 MSEC /
-        2DUP < IF DROP ELSE NIP THEN . CR
-    ELSE STACK_CLEAR THEN
-;
-: SONAR_DISTANCE BEGIN 1 SEC DELAY DISTANCE_DETECTION BREAK_BUTTON IS_CLICKED UNTIL BREAK_BUTTON CLEAR_EVENT ;
-
+: DISTANCE_DETECTION ( stampa a video la distanza rilevata )
