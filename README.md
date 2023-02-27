@@ -44,44 +44,10 @@ Il codice seguente è stack-oriented, cioè si farà molto uso delle word per la
 Nello specifico le word utilizzate sono:
 
 Stack Manipulation
-DUP
-DROP
-2DUP
-SWAP
-ROT
-
+DUP DROP 2DUP SWAP ROT
 Logical and Bitwise Operations
-AND
-OR
-INVERT
-LSHIFT
-RSHIFT
-Arithmetic Operations
-MOD
-+
--
-*
-/
-1+
-2+
-
-
-: 1BIT_SET 1 SWAP LSHIFT ;
-: GPIO 1BIT_SET ;
-: 2_LSHIFT A MOD 2 * ;
-: 3_LSHIFT A MOD 3 * ;
-: N_GPIO 0 SWAP BEGIN DUP 2 MOD 0 = IF 1 RSHIFT SWAP 1+ SWAP ELSE THEN DUP 2 = UNTIL DROP 1+ ;
-: MASK2 2_LSHIFT 3 SWAP LSHIFT INVERT ;
-: MASK3 3_LSHIFT 7 SWAP LSHIFT INVERT ;
-: OUT 3_LSHIFT 1BIT_SET ;
-: ALT0_FUN 3_LSHIFT 2+ 1BIT_SET ;
-: ALT5_FUN 3_LSHIFT 1+ 1BIT_SET ;
-: FSEL DUP A / 4 * GPFSEL0 + ;
-: FUNCTION FSEL 2DUP SWAP MASK3 SWAP @ AND ROT ;
-: INPUT N_GPIO FUNCTION DROP SWAP ! ;
-: OUTPUT N_GPIO FUNCTION OUT OR SWAP ! ;
-: ALT0 N_GPIO FUNCTION ALT0_FUN OR SWAP ! ;
-: ALT5 N_GPIO FUNCTION ALT5_FUN OR SWAP ! ;
+AND OR INVERT LSHIFT RSHIFT
+Arithmetic Operations MOD + - * / 1+ 2+
 
 
 GPSET
