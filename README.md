@@ -43,7 +43,7 @@ https://github.com/organix/pijFORTHos/blob/master/doc/forth.md#built-in-forth-wo
 Il codice seguente è stack-oriented, cioè si farà molto uso delle word per la manipolazione dello stack per l'implementazione di word utili nella realizzazione di un livello di astrazione superiore.
 Nello specifico le word utilizzate sono:
 
-STACK MANIPULATION
+Stack Manipulation
 DUP
 DROP
 2DUP
@@ -56,8 +56,7 @@ OR
 INVERT
 LSHIFT
 RSHIFT
-
-ARITMETIC
+Arithmetic Operations
 MOD
 +
 -
