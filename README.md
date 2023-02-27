@@ -172,7 +172,7 @@ Invece per resettare il registro degli eventi per uno specifico GPIO si definisc
 
 : CLEAR_EVENT GPEDS0 ENABLE ; ( GPIOn CLEAR_EVENT )
 
-# Applicazione della gestione degli eventi: utilizzo dei BUTTONs
+# Applicazione della gestione degli eventi: i BUTTONs
 
 Tra i più comuni dispotivi di input è presente il pulsante (BUTTON). Per il suo corretto funzionamento bisogna settare il GPIO in input ( impostazione di default ), abilitare il GPIO al rilevamento di fronti di salita /discesa, e abilitare il pull-up.
 
