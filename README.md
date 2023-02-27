@@ -19,6 +19,7 @@ Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il
 General-Purpose Input/Output (GPIO) ha i seguenti registri. Si presuppone che tutti gli accessi siano a 32 bit.
 
 Definiamo come costante l'indirizzo di base del registro GPIO
+
 RPI4 200000 + CONSTANT GPIO_ADDR
 
 I primi registri che ci serviranno per la gestione dei GPIO sono i GPFSEL
@@ -26,7 +27,9 @@ I primi registri che ci serviranno per la gestione dei GPIO sono i GPFSEL
 I registri di selezione funzione vengono utilizzati per definire il funzionamento dei pin I/O generici.
 
 GPIO_ADDR      CONSTANT GPFSEL0
+
 GPIO_ADDR  4 + CONSTANT GPFSEL1
+
 GPIO_ADDR  8 + CONSTANT GPFSEL2
 
 N.B. In questa libreria andremo a gestire solo i GPIO appartenenti al banco 0, cioè quelli accessibili dall'utente tramite i pin del RPI4 come mostrati nel sito https://pinout.xyz/ . Nonostante ciò l'utente ha la possibilità di estendere 
