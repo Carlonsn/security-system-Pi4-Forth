@@ -1,6 +1,6 @@
 # security-system-Pi4-Forth
 
-Descrizione libreria implementata per la gestione dei gpio di RPI4
+# Descrizione libreria implementata per la gestione dei gpio di RPI4
 
 Per iniziare settiamo la base dell'interprete in esadecimale con la word
 
@@ -32,26 +32,28 @@ N.B. In questa libreria andremo a gestire solo i GPIO appartenenti al banco 0, c
 autonomamente questa libreria aggiungendo i registri per la gestione degli altri banchi.
 
 
-# funzionalità implementate per la function selection
+# Funzionalità implementate per la function selection
 
 In questa sezione utilizzeremo le word definite qui
 https://github.com/organix/pijFORTHos/blob/master/doc/forth.md#built-in-forth-words 
 Il codice seguente è stack-oriented, cioè si farà molto uso delle word per la manipolazione dello stack per l'implementazione di word utili nella realizzazione di un livello di astrazione superiore.
 Nello specifico le word utilizzate sono:
-# STACK MANIPULATION
+
+STACK MANIPULATION
 DUP
 DROP
 2DUP
 SWAP
 ROT
-# Logical and Bitwise Operations
+
+Logical and Bitwise Operations
 AND
 OR
 INVERT
 LSHIFT
 RSHIFT
 
-# ARITMETIC
+ARITMETIC
 MOD
 +
 -
