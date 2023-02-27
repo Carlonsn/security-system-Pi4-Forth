@@ -102,6 +102,7 @@ Le seguenti word richiamano le word precedentemente definite e effettuano lo sto
 
 # Funzionalità implementate per la gestione dei LED
 
+I leds sono tra i più semplici dispositivi di output e grazie ad essi è possibile mettere in pratica la function selection per abilitare il GPIO in uscita.
 I registri che permettono di definire il funzionamento in output di un GPIO sono GPSETn e GPCLRn.
 
 GPSETn
@@ -137,8 +138,62 @@ I registri livello restituiscono il valore effettivo (HIGH o LOW) della corrente
 
 GPIO_ADDR 34 + CONSTANT GPLEV0
 
-Per sapere se un GPIO in quel istante è in HIGH cioè è percorso dalla corrente si definisce la seguente word:
+N.B. Il registro GPLEV0 in RPI4 è di sola lettura quindi è possibile solo prelevare ( @ ) il valore del registro e non modificarlo.
+Per sapere se un GPIO in quel istante è in HIGH cioè è percorso da corrente si definisce la seguente word:
 
 : IS_ON GPLEV0 @ AND 0 = IF 0 ELSE 1 THEN ;
 
+# Funzionalità implementate per la gestione degli eventi
+
+I registri di stato di rilevamento degli eventi vengono utilizzati per registrare eventi di livello e di edge sui GPIO. Il bit rilevante nei
+Event Detect Status Registers viene impostato ogni volta che: 1) viene rilevato un fronte che corrisponde al tipo di fronte programmato
+i registri di abilitazione rilevamento fronte di salita/discesa, oppure 2) viene rilevato un livello che corrisponde al tipo di livello programmato
+i registri di abilitazione rilevamento livello alto/basso. Il bit viene azzerato scrivendo un "1" nel bit relativo. I registri di abilitazione del rilevamento 
+si suddividono in: Synchronous e Asynchronous.
+
+GPIO_ADDR 40 + CONSTANT GPEDS0
+
+GPIO_ADDR 4C + CONSTANT GPREN0
+
+GPIO_ADDR 58 + CONSTANT GPFEN0
+
+GPIO_ADDR 7C + CONSTANT GPAREN0
+
+GPIO_ADDR 88 + CONSTANT GPAFEN0
+
+Per abilitare o disabilitare un GPIO al rilevamento di eventi si definiscono le seguenti word:
+
+: ENABLE TUCK @ OR SWAP ! ; ( GPIOn REGISTER ENABLE -- abilita il GPIO n al rilevamento descritto dal registro )
+
+: DISABLE SWAP INVERT OVER @ AND SWAP ! ;
+
+Invece per resettare il registro degli eventi per uno specifico GPIO si definisce la word
+
+: CLEAR_EVENT GPEDS0 ENABLE ; ( GPIOn CLEAR_EVENT )
+
+# Applicazione della gestione degli eventi: utilizzo dei BUTTONs
+
+Tra i più comuni dispotivi di input è presente il pulsante (BUTTON). Per il suo corretto funzionamento bisogna settare il GPIO in input ( impostazione di default ), abilitare il GPIO al rilevamento di fronti di salita /discesa, e abilitare il pull-up.
+
+Per abilitare il pull-up di un GPIO si definiscono il registro e le word seguenti:
+
+GPIO_ADDR E4 + CONSTANT GPIO_PUP_PDN_0
+
+: PULL_UP N_GPIO GPIO_PUP_PDN_0 2DUP SWAP MASK2 SWAP @ AND ROT 1BIT_SET OR SWAP ! ;
+
+: PULL_DOWN N_GPIO GPIO_PUP_PDN_0 2DUP SWAP MASK2 SWAP @ AND ROT 1+ 1BIT_SET OR SWAP ! ;
+
+Tramite le funzionalità finora descritte, è possibile ad esempio gestire il funzionamento di un button nel seguente modo:
+```
+GPIO9 INPUT
+GPIO9 PULL_UP
+GPIO9 CONSTANT BUTTON
+BUTTON GPREN0 ENABLE
+BUTTON CLEAR_EVENT
+: IS_CLICKED GPEDS0 @ AND 0 = IF 0 ELSE 1 THEN ;
+: IS_PRESSED GPLEV0 @ AND 0 = IF 1 ELSE 0 THEN ;
+
+BUTTON IS_CLICKED
+BUTTON IS_PRESSED
+```
 
