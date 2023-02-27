@@ -1,5 +1,10 @@
 # security-system-Pi4-Forth
 
+# Descrizione del progetto
+![photo_2023-02-27_18-58-20](https://user-images.githubusercontent.com/74939222/221645527-e554197d-b09d-4666-b268-ed47c611ae11.jpg)
+![photo_2023-02-27_18-55-48](https://user-images.githubusercontent.com/74939222/221645573-7e1368a9-8908-4797-b3ec-571af9a11c17.jpg)
+
+
 # Descrizione libreria in FORTH per la gestione di dispositivi input/output per Raspberry Pi 4 Model B
 
 Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno di BCM2711.
