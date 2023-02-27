@@ -1,6 +1,8 @@
 # security-system-Pi4-Forth
 
-# Descrizione libreria implementata per la gestione dei gpio di Raspberry Pi 4 Model B
+# Descrizione libreria implementata per la gestione dei GPIO di Raspberry Pi 4 Model B
+
+Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno di BCM2711.
 
 Per iniziare è necessario settare la base dell'interprete in esadecimale con la word
 
@@ -14,14 +16,11 @@ FE000000 CONSTANT RPI4
 
 da questo momento è possibile definire qualsiasi altro registro aggiungendo a quest'ultimo il valore del registro desiderato.
 
-Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno di BCM2711.
-
-General-Purpose Input/Output (GPIO) ha i seguenti registri. Si presuppone che tutti gli accessi siano a 32 bit.
-
 Si definisce come costante l'indirizzo di base del registro GPIO
 
 RPI4 200000 + CONSTANT GPIO_ADDR
 
+General-Purpose Input/Output (GPIO) ha i seguenti registri. Si presuppone che tutti gli accessi siano a 32 bit.
 I primi registri che serviranno per la gestione dei GPIO sono i GPFSEL.
 
 I registri di selezione funzione sono utilizzati per definire il funzionamento dei pin I/O generici.
@@ -37,9 +36,9 @@ N.B. In questa libreria verranno gestiti solo i GPIO appartenenti al banco 0, ci
 
 # Funzionalità implementate per la function selection
 
-In questa sezione si farò uso delle word definite nel seguente link
+In questa sezione si farà uso delle word definite nel seguente link
 https://github.com/organix/pijFORTHos/blob/master/doc/forth.md#built-in-forth-words 
-Il codice seguente è stack-oriented, cioè si farà uso delle word per la manipolazione dello stack per definizione di word utili nella realizzazione di un livello di astrazione superiore.
+Il codice seguente è stack-oriented, cioè si utilizzeranno diverse word per la manipolazione dello stack in modo da definire word utili per la realizzazione di un livello di astrazione superiore.
 Nello specifico le word utilizzate sono:
 
 Stack Manipulation
