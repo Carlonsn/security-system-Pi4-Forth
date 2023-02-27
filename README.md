@@ -6,7 +6,7 @@ Per iniziare è necessario settare la base dell'interprete in esadecimale con la
 
 HEX
 
-Gli indirizzi dei registri del RPI4 sono in esadecimale. Essi si trovano nella documentazione della BCM2711 ARM Peripheral
+Gli indirizzi dei registri del RPI4 sono in esadecimale. Essi si trovano nella documentazione BCM2711 ARM Peripheral
 
 Si definisce come costante il valore esadecimale corrispondente all'indirizzo per il RPI4
 
@@ -14,7 +14,7 @@ FE000000 CONSTANT RPI4
 
 da questo momento è possibile definire qualsiasi altro registro aggiungendo a quest'ultimo il valore del registro desiderato.
 
-Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno BCM2711.
+Ci sono 58 linee GPIO (General-Purpose Input/Output) suddivise in tre banchi. Il banco 0 contiene i GPIO da 0 a 27, il banco 1 contiene GPIO da 28 a 45 e il banco 2 contiene GPIO da 46 a 57. Tutti i pin GPIO hanno almeno due funzioni alternative all'interno di BCM2711.
 
 General-Purpose Input/Output (GPIO) ha i seguenti registri. Si presuppone che tutti gli accessi siano a 32 bit.
 
