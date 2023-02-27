@@ -52,6 +52,47 @@ AND OR INVERT LSHIFT RSHIFT
 Arithmetic Operations MOD + - * / 1+ 2+
 
 
+: 1BIT_SET 1 SWAP LSHIFT ;
+
+
+<img width="240" alt="image" src="https://user-images.githubusercontent.com/74939222/221558739-e0e59b38-405d-4da9-a840-0c3813faf994.png">
+
+: GPIO 1BIT_SET ;
+: N_GPIO 0 SWAP BEGIN DUP 2 MOD 0 = IF 1 RSHIFT SWAP 1+ SWAP ELSE THEN DUP 2 = UNTIL DROP 1+ ;
+
+<img width="273" alt="image" src="https://user-images.githubusercontent.com/74939222/221565364-d26266cd-daec-4b97-9597-6c2a211a8c38.png">
+
+
+: 2_LSHIFT A MOD 2 * ;
+: 3_LSHIFT A MOD 3 * ;
+
+<img width="266" alt="image" src="https://user-images.githubusercontent.com/74939222/221560372-4ac5afdf-8e9b-4531-96fa-67351a46bec7.png">
+
+: MASK2 2_LSHIFT 3 SWAP LSHIFT INVERT ;
+: MASK3 3_LSHIFT 7 SWAP LSHIFT INVERT ;
+
+<img width="506" alt="image" src="https://user-images.githubusercontent.com/74939222/221561431-f514e089-e8ed-4f95-83ec-96a948236f02.png">
+
+
+: OUT 3_LSHIFT 1BIT_SET ;
+: ALT0_FUN 3_LSHIFT 2+ 1BIT_SET ;
+: ALT5_FUN 3_LSHIFT 1+ 1BIT_SET ;
+
+<img width="285" alt="image" src="https://user-images.githubusercontent.com/74939222/221562811-1422c824-fbd3-4daa-94e4-d816bdda4b21.png">
+
+
+: FSEL A / 4 * GPFSEL0 + ;
+
+<img width="334" alt="image" src="https://user-images.githubusercontent.com/74939222/221564363-fbfeac78-6579-444a-a2bb-a5edb388f81d.png">
+
+
+: FUNCTION FSEL 2DUP SWAP MASK3 SWAP @ AND ROT ;
+: INPUT N_GPIO FUNCTION DROP SWAP ! ;
+: OUTPUT N_GPIO FUNCTION OUT OR SWAP ! ;
+: ALT0 N_GPIO FUNCTION ALT0_FUN OR SWAP ! ;
+: ALT5 N_GPIO FUNCTION ALT5_FUN OR SWAP ! ;
+
+
 GPSET
 I registri del set di output vengono utilizzati per impostare un pin GPIO. Il campo SETn definisce il rispettivo pin GPIO da impostare. Se il pin viene definito come output, il bit verrà impostato in base all'ultimo set/clear operazione.
 
