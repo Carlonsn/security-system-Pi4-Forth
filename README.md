@@ -8,7 +8,7 @@ Per iniziare è necessario settare la base dell'interprete in esadecimale con la
 
 HEX
 
-Gli indirizzi dei registri del RPI4 sono in esadecimale. Essi si trovano nella documentazione BCM2711 ARM Peripheral
+Gli indirizzi dei registri del RPI4 sono in esadecimale ed è possibile reperirli nella documentazione BCM2711 ARM Peripheral
 
 Si definisce come costante il valore esadecimale corrispondente all'indirizzo per il RPI4
 
