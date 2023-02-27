@@ -119,19 +119,26 @@ Tramite i registri appena descritti, è possibile ad esempio gestire il funziona
 GPIO13 OUTPUT ( si setta il GPIO13 in output )
 
 : LED GPSET0 GPCLR0 ; 
-
 : ON DROP ! ;
-
 : OFF NIP ! ;
 
 GPIO13 LED ON
 GPIO13 LED OFF
 ```
-per una migliore leggibilità si definisce la costante GPIO13 CONSTANT RED e quindi il comando finale 
+per una migliore leggibilità e scalabilità del codice si definisce la costante GPIO13 CONSTANT RED e quindi il comando finale sarà
+```
+RED LED ON
+RED LED OFF
+```
+in questo modo è possibile aggiungere quanti led si vuole e manipolare il loro funzionamento in base al colore.
+
+GPLEVn
+I registri livello restituiscono il valore effettivo (HIGH o LOW) della corrente del pin. Il campo LEVn fornisce il valore del corrispondente GPIO.
 
 GPIO_ADDR 34 + CONSTANT GPLEV0
 
-: HIGH LED ON ;
-: LOW LED OFF ;
+Per sapere se un GPIO in quel istante è in HIGH cioè è percorso dalla corrente si definisce la seguente word:
+
 : IS_ON GPLEV0 @ AND 0 = IF 0 ELSE 1 THEN ;
-: BLINK 2DUP LED ON DELAY LED OFF DELAY ;
+
+
