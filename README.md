@@ -1,6 +1,6 @@
 # security-system-Pi4-Forth
 
-# Descrizione libreria implementata per la gestione dei gpio di RPI4
+# Descrizione libreria implementata per la gestione dei gpio di Raspberry Pi 4 Model B
 
 Per iniziare è necessario settare la base dell'interprete in esadecimale con la word
 
@@ -32,7 +32,7 @@ GPIO_ADDR  4 + CONSTANT GPFSEL1
 
 GPIO_ADDR  8 + CONSTANT GPFSEL2
 
-N.B. In questa libreria verranno gestiti solo i GPIO appartenenti al banco 0, cioè quelli accessibili dall'utente tramite i pin del RPI4 come mostrati nel sito https://pinout.xyz/ . Ciononostante l'utente ha la possibilità di estendere autonomamente questa libreria aggiungendo i registri per la gestione degli altri banchi.
+N.B. In questa libreria verranno gestiti solo i GPIO appartenenti al banco 0, cioè quelli accessibili dall'utente tramite i pin del RPI4 come mostrati nel sito https://pinout.xyz/ . Ciononostante l'utente ha la possibilità di estendere autonomamente la libreria aggiungendo i registri per la gestione dei restanti banchi.
 
 
 # Funzionalità implementate per la function selection
@@ -80,17 +80,18 @@ Arithmetic Operations MOD + - * / 1+ 2+
 
 : ALT5_FUN 3_LSHIFT 1+ 1BIT_SET ; ( GPFSEL in alt5   - 010 )
 
-<img width="285" alt="image" src="https://user-images.githubusercontent.com/74939222/221562811-1422c824-fbd3-4daa-94e4-d816bdda4b21.png">
+N.B. L'utente ha la possibilità di entendere la libreria aggiungendo le restanti function definendo le mask corrispondenti
 
+<img width="285" alt="image" src="https://user-images.githubusercontent.com/74939222/221562811-1422c824-fbd3-4daa-94e4-d816bdda4b21.png">
 
 : FSEL A / 4 * GPFSEL0 + ; ( restituisce il registro GPFSEL corrispondente al n GPIO calcolando l'offset = n/10 * 4)
 
 <img width="334" alt="image" src="https://user-images.githubusercontent.com/74939222/221564363-fbfeac78-6579-444a-a2bb-a5edb388f81d.png">
 
 
-
 : FUNCTION FSEL 2DUP SWAP MASK3 SWAP @ AND ROT ; ( per migliorare la leggibilità del codice )
 
+Le seguenti word richiamano le word precedentemente definite e effettuano lo store ( ! ) del valore ottenuto all'interno del registro GPFSELn in modo da settare la function desiderata.
 
 : INPUT N_GPIO FUNCTION DROP SWAP ! ;
 
@@ -99,7 +100,6 @@ Arithmetic Operations MOD + - * / 1+ 2+
 : ALT0 N_GPIO FUNCTION ALT0_FUN OR SWAP ! ;
 
 : ALT5 N_GPIO FUNCTION ALT5_FUN OR SWAP ! ;
-
 
 
 GPSET
