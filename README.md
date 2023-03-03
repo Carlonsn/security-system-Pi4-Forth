@@ -119,7 +119,7 @@ Arithmetic Operations MOD + - * / 1+ 2+
 
 : ALT5_FUN 3_LSHIFT 1+ 1BIT_SET ; ( GPFSEL in alt5   - 010 )
 
-N.B. L'utente ha la possibilità di entendere la libreria aggiungendo le restanti alternative function definendo le mask corrispondenti.
+N.B. L'utente ha la possibilità di estendere la libreria aggiungendo le restanti alternative function definendo le mask corrispondenti.
 
 <img width="285" alt="image" src="https://user-images.githubusercontent.com/74939222/221562811-1422c824-fbd3-4daa-94e4-d816bdda4b21.png">
 
